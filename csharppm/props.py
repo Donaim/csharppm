@@ -2,6 +2,11 @@
 import inspect, os
 script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 
+def pjoin(*args):
+    re = ""
+    for p in args:
+        re = os.path.join(re, p)
+    return re.replace('\\', os.sep).replace(os.sep + os.sep, os.sep)
 
 def read_file(file):
     with open(file, 'r') as f:

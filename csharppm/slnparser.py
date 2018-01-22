@@ -100,8 +100,8 @@ class slnobj:
             self.preh = parse_methods.get_pre_headers(pre)
             self.headers = []
     
-    def get_headers(): return self.headers
-    def get_preh(): return self.preh
+    def get_headers(self): return self.headers
+    def get_preh(self): return self.preh
 
     def __str__(self):
         wr = slnwriter()

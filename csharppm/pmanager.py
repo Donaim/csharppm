@@ -48,15 +48,26 @@ class project:
 class csproj(project):
     def __init__(self, file):
         project.__init__(self, file)
+        self.ref_group_index = self.__get_ref_group()
         self.__check_refrence_format()
 
+    def get_ref_group_index(self): self.ref_group_index
+    def __get_ref_group(self):
+        lst = self.get('Project', 'ItemGroup')
+        for i in range(len(lst)):
+            if(type(lst[i]) != type(OrderedDict())): continue
+            if('Reference' in lst[i].keys()): return i
+        
+        lst.append(OrderedDict({'Reference': list()}))
+        return len(lst) - 1
+
     def __check_refrence_format(self):
-        if(type(self.get('Project', 'ItemGroup', -1)) != type(OrderedDict())):
-            self.set(OrderedDict({'Reference': list()}), 'Project', 'ItemGroup', -1)
-        elif(type(self.get('Project', 'ItemGroup', -1, 'Reference')) != type(list())):
-            self.set(list(), 'Project', 'ItemGroup', -1, 'Reference')
+        if(type(self.get('Project', 'ItemGroup', self.ref_group_index, 'Reference')) != type(list())):
+            self.set(list(), 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
         
     def add_reference(self, path, name=None):
         if(name == None):
             name = os.path.basename(path).split(sep='.')[0]
-        self.add_field({"@Include": name, "HintPath": path }, 'Project', 'ItemGroup', -1, 'Reference')
+        self.add_field({"@Include": name, "HintPath": path }, 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
+
+
