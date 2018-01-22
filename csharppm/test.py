@@ -1,5 +1,7 @@
 import mxml
 import pmanager as pm
+import props
+import os
 
 def test_mxml():
     x = mxml.read_xml("tmp.csproj")
@@ -23,7 +25,8 @@ def test_csproj():
     p.save()
 
 # make a copy
-mxml.write_file('tmp.csproj', mxml.read_file('shablon.csproj'))
+mxml.write_file('tmp.csproj', mxml.read_file(os.path.join(props.script_dir, 'shablon.csproj')))
 
+print("TESTING")
 # test_pmanager()
 test_csproj()
