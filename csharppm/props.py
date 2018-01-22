@@ -12,5 +12,12 @@ def read_file(file):
     with open(file, 'r') as f:
         return f.read()
 def write_file(file, text):
-    with open(file, 'w+') as f:
-        f.write(text)
+    def write():
+        with open(file, 'w+') as f:
+            f.write(text)
+    try:
+        write()
+    except:
+        os.mkdir(os.path.dirname(file))
+        write()
+        pass

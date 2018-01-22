@@ -5,11 +5,11 @@ import slndata
 class parse_methods:
     def get_preSolution(gl):
         start = 0
-        while not gl[start].endswith('preSolution') and start < len(gl):
+        while start < len(gl) and not gl[start].endswith('preSolution'):
             start += 1
 
         end = start + 1
-        while not gl[end].strip() == 'EndGlobalSection' and end >= 0:
+        while end >= 0 and not gl[end].strip() == 'EndGlobalSection':
             end += 1
 
         return gl[start:end + 1]
@@ -23,9 +23,9 @@ class parse_methods:
         start = 0
         end = len(lines) - 1
 
-        while not lines[start].startswith('Project') and start < len(lines):
+        while start < len(lines) and not lines[start].startswith('Project'):
             start += 1
-        while not lines[end].startswith('EndProject') and end >= 0:
+        while end >= 0 and not lines[end].startswith('EndProject'):
             end -= 1
 
         return lines[start:end + 1]
@@ -59,7 +59,7 @@ class slnProjInfo:
         self.guid = guid
         self.typeguid = typeguid
     def __str__(self):
-        return slndata.pheader.format(self.name, self.path, self.guid, self.typeguid)
+        return slndata.pheader.format(self.typeguid, self.name, self.path, self.guid)
 
 class slnwriter:
     def __init__(self):

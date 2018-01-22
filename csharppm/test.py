@@ -31,6 +31,7 @@ def test_sln():
 
 def test_sln_manager():
     s = slnmng('DModuler.sln')
+    s.create_project('lol/lol.csproj', ['System', 'Kdd'], 'COOLTYPE', 'VERSADD')
 
 
 # make a copy

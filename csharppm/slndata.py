@@ -23,3 +23,6 @@ default_headers = [
 "Debug|x86 = Debug|x86",
 ]
 
+csharpguid = '{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'
+csharpstdtype = "Library"
+csharpstdver = '4.5.2'
