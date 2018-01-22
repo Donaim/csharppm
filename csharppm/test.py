@@ -1,7 +1,8 @@
+import os, props
 import mxml
 import pmanager as pm
-import props
-import os
+from slnparser import slnobj
+
 
 def test_mxml():
     x = mxml.read_xml("tmp.csproj")
@@ -9,7 +10,7 @@ def test_mxml():
     props['AssemblyName'] = 'LUL'
     # mxml.print_dict(props)
 
-    mxml.write_xml('out.csproj', x)
+    mxml.write_xml('tmp.csproj', x)
 
 def test_pmanager():
     p = pm.project('tmp.csproj')
@@ -23,10 +24,16 @@ def test_csproj():
     p.add_reference('hahaha/kek.dll')
     p.add_reference('ddd/aaaa/fuu.dll')
     p.save()
+def test_sln():
+    s = slnobj('tmp.sln')
+    print(s)
+
 
 # make a copy
-mxml.write_file('tmp.csproj', mxml.read_file(os.path.join(props.script_dir, 'shablon.csproj')))
+props.write_file('tmp.csproj', props.read_file(os.path.join(props.script_dir, 'template.csproj')))
+props.write_file('tmp.sln', props.read_file(os.path.join(props.script_dir, 'template.sln')))
 
 print("TESTING")
 # test_pmanager()
-test_csproj()
+# test_csproj()
+test_sln()
