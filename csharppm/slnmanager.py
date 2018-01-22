@@ -24,14 +24,14 @@ class slnmng(cssln):
             proj = pm.csproj(loc)
             self.projects.append( proj )
 
-    def create_project(self, file, refs = None, type = slndata.csharpstdtype, fver = slndata.csharpstdver):
+    def create_project(self, file, type = slndata.csharpstdtype, fver = slndata.csharpstdver):
         guid = pm.csproject_creator.get_guid()
         name = path.basename(file).split('.')[0]
 
         self.add_new_project( slnProjInfo(name, file, guid, slndata.csharpguid) )
         self.save()
 
-        pm.csproject_creator.create(file, pm.csproj_props(name=name, refs=refs, fver=fver, type=type, guid=guid))
+        pm.csproject_creator.create(file, pm.csproj_props(name=name, fver=fver, type=type, guid=guid))
 
     def save(self):
         write_file(self.slnfile, str(self))

@@ -72,9 +72,8 @@ class csproj(project):
         self.add_field({"@Include": name, "HintPath": path }, 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
 
 class csproj_props:
-    def __init__(self, name, refs, fver, type, guid):
+    def __init__(self, name, fver, type, guid):
         self.name = name
-        self.refs = refs
         self.fver = fver
         self.type = type
         self.guid = guid
@@ -86,11 +85,9 @@ class csproject_creator:
 
     def generate(pr):
         re = csproject_creator.read_template()
-        frefs = csproject_creator.format_refs(pr.refs)
 
         re = re.replace("#name#", pr.name)
         re = re.replace("#fver#", pr.fver)
-        re = re.replace("#refs#", frefs)
         re = re.replace("#type#", pr.type)
         re = re.replace("#guid#", pr.guid)
         return re
@@ -98,13 +95,6 @@ class csproject_creator:
     def read_template():
         return props.read_file(props.pjoin( props.script_dir, 'template.csproj' ))
 
-    def format_refs(refs):
-        if(refs == None): return ""
-        frefs = ""
-        for r in refs:
-            frefs += "\t\t" + "<Reference Include=\"" + r + "\" />" + "\n"
-        return frefs
-    
     def get_guid():
         hex = string.digits + "ABCDEF"
         def rand_hex(len):

@@ -36,7 +36,6 @@
     <Compile Include="*.cs" />
   </ItemGroup>
   <ItemGroup>
-#refs#
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
