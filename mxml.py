@@ -18,3 +18,9 @@ def write_xml(file, dict, pretty=True):
 
 def print_dict(dict):
     print(json.dumps(dict, sort_keys=True, indent=4))
+
+def cheader(name, **fields):
+    ff = {}
+    for k, v in fields.items():
+        ff['@' + k] = v
+    return {name: ff}

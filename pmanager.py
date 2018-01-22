@@ -1,5 +1,8 @@
 import mxml
 import json
+import os
+from collections import OrderedDict
+
 
 class project:
     def __init__(self, file):
@@ -33,3 +36,22 @@ class project:
         re[path[-1]] = val
     def set(self, val, *path):
         self.__set(val, path)
+
+    def add_field(self, val, *path):
+        self.__add_field(val, path)
+    def __add_field(self, val, path):
+        re = self.dict
+        for i in path[0:-1]:
+            re = re[i]
+        re[path[-1]].append(val)
+
+class csproj(project):
+    def __init__(self, file):
+        project.__init__(self, file)
+
+    def add_reference(self, path, name=None):
+        if(type(self.get('Project', 'ItemGroup', -1)) != type(OrderedDict())):
+            self.set(OrderedDict({'Reference': list()}), 'Project', 'ItemGroup', -1)
+        if(name == None):
+            name = os.path.basename(path).split(sep='.')[0]
+        self.add_field({"@Include": name, "HintPath": path }, 'Project', 'ItemGroup', -1, 'Reference')

@@ -15,8 +15,15 @@ def test_pmanager():
     p.set('KEK1', 'Project', 'PropertyGroup', 0, 'AssemblyName')
     p.print('Project', 'PropertyGroup', 0)
     p.save()
+def test_csproj():
+    p = pm.csproj('tmp.csproj')
+    p.add_reference('vutils/lul.dll')
+    p.add_reference('hahaha/kek.dll')
+    p.add_reference('ddd/aaaa/fuu.dll')
+    p.save()
 
 # make a copy
 mxml.write_file('tmp.csproj', mxml.read_file('shablon.csproj'))
 
-test_pmanager()
+# test_pmanager()
+test_csproj()
