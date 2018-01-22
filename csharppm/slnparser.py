@@ -23,7 +23,7 @@ class parse_methods:
         start = 0
         end = len(lines) - 1
 
-        while not lines[start].startswith('Project') and start > len(lines):
+        while not lines[start].startswith('Project') and start < len(lines):
             start += 1
         while not lines[end].startswith('EndProject') and end >= 0:
             end -= 1
@@ -35,11 +35,10 @@ class parse_methods:
     def get_project_headers(lines):
         re = []
         for l in lines:
-            if(l.strip() == 'EndProject'): continue
+            if(l.strip() == 'EndProject' or len(l) < 10): continue
             guides = parse_methods.guidre.findall(l)
             names = parse_methods.namere.findall(l)
             re.append(slnProjInfo(names[0], names[1], guides[1], guides[0]))
-            # print(re[-1])
 
         return re
 
