@@ -13,3 +13,13 @@ EndProject"""
 
 
 cfgs = ("ActiveCfg", "Build")
+
+default_headers = [
+"Release|Any CPU = Release|Any CPU",
+"Release|x64 = Release|x64",
+"Release|x86 = Release|x86",
+"Debug|Any CPU = Debug|Any CPU",
+"Debug|x64 = Debug|x64",
+"Debug|x86 = Debug|x86",
+]
+

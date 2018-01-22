@@ -1,16 +1,15 @@
-import string
+import os, string, re
 import props
-import re
 import slndata
 
 class parse_methods:
     def get_preSolution(gl):
         start = 0
-        while not gl[start].endswith('preSolution'):
+        while not gl[start].endswith('preSolution') and start < len(gl):
             start += 1
 
         end = start + 1
-        while not gl[end].strip() == 'EndGlobalSection':
+        while not gl[end].strip() == 'EndGlobalSection' and end >= 0:
             end += 1
 
         return gl[start:end + 1]
@@ -24,9 +23,9 @@ class parse_methods:
         start = 0
         end = len(lines) - 1
 
-        while not lines[start].startswith('Project'):
+        while not lines[start].startswith('Project') and start > len(lines):
             start += 1
-        while not lines[end].startswith('EndProject'):
+        while not lines[end].startswith('EndProject') and end >= 0:
             end -= 1
 
         return lines[start:end + 1]
@@ -46,8 +45,9 @@ class parse_methods:
 
     def get_pre_headers(pre):
         re = []
-        for i in range(1, len(pre) - 1):
-            p = pre[i].strip('\t').split('=')
+        for l in pre:
+            p = l.strip('\t').split('=')
+            if(p[0].startswith("GlobalSection") or p[0].startswith("EndGlobalSection")): continue
             p[0] = p[0].rstrip(' ')
             p[1] = p[1].lstrip(' ')
             re.append(p)
@@ -86,18 +86,24 @@ class slnwriter:
     def __str__(self): return self.txt
 
 class slnobj:
-    def __init__(self):
-        pass
     def __init__(self, file):
-        text = props.read_file(file)
-        lines = text.split('\n')
-        gl = parse_methods.get_global(lines)
-        pr = parse_methods.get_projects_lines(lines)
-        self.headers = parse_methods.get_project_headers(pr)
+        if(file != None and os.path.isfile(file)):
+            text = props.read_file(file)
+            lines = text.split('\n')
+            gl = parse_methods.get_global(lines)
+            pr = parse_methods.get_projects_lines(lines)
+            self.headers = parse_methods.get_project_headers(pr)
 
-        pre = parse_methods.get_preSolution(gl)
-        self.preh = parse_methods.get_pre_headers(pre)
+            pre = parse_methods.get_preSolution(gl)
+            self.preh = parse_methods.get_pre_headers(pre)
+        else:
+            pre = slndata.default_headers
+            self.preh = parse_methods.get_pre_headers(pre)
+            self.headers = []
     
+    def get_headers(): return self.headers
+    def get_preh(): return self.preh
+
     def __str__(self):
         wr = slnwriter()
 
@@ -121,5 +127,9 @@ class slnobj:
         wr.wpop("EndGlobal")
         return str(wr)
 
+class cssln(slnobj):
+    def __init__(self, file):
+        slnobj.__init__(self, file)
 
-
+    def add_new_project(self, proj):
+        self.headers.append(proj)

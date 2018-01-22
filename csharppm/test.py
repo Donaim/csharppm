@@ -2,6 +2,7 @@ import os, props
 import mxml
 import pmanager as pm
 from slnparser import slnobj
+from slnmanager import slnmng
 
 
 def test_mxml():
@@ -28,6 +29,9 @@ def test_sln():
     s = slnobj('tmp.sln')
     print(s)
 
+def test_sln_manager():
+    s = slnmng('DModuler.sln')
+
 
 # make a copy
 props.write_file('tmp.csproj', props.read_file(os.path.join(props.script_dir, 'template.csproj')))
@@ -36,4 +40,5 @@ props.write_file('tmp.sln', props.read_file(os.path.join(props.script_dir, 'temp
 print("TESTING")
 # test_pmanager()
 # test_csproj()
-test_sln()
+# test_sln()
+test_sln_manager()

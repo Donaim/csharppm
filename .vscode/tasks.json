@@ -6,7 +6,7 @@
         {
             "label": "test",
             "type": "shell",
-            "command": "python3 csharppm/__init__.py",
+            "command": "cd ${workspaceFolder}/test/test_sol ; python3 ../../csharppm/__init__.py",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
