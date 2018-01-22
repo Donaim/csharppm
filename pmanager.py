@@ -48,10 +48,15 @@ class project:
 class csproj(project):
     def __init__(self, file):
         project.__init__(self, file)
+        self.__check_refrence_format()
 
-    def add_reference(self, path, name=None):
+    def __check_refrence_format(self):
         if(type(self.get('Project', 'ItemGroup', -1)) != type(OrderedDict())):
             self.set(OrderedDict({'Reference': list()}), 'Project', 'ItemGroup', -1)
+        elif(type(self.get('Project', 'ItemGroup', -1, 'Reference')) != type(list())):
+            self.set(list(), 'Project', 'ItemGroup', -1, 'Reference')
+        
+    def add_reference(self, path, name=None):
         if(name == None):
             name = os.path.basename(path).split(sep='.')[0]
         self.add_field({"@Include": name, "HintPath": path }, 'Project', 'ItemGroup', -1, 'Reference')
