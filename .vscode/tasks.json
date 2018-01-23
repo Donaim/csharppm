@@ -20,7 +20,7 @@
             "problemMatcher": []
         },
         {
-            "label": "removeForB",
+            "label": "cleanForB",
             "type": "shell",
             "command": "rm -r ${workspaceFolder}/test/test_B/* ; mkdir -p ${workspaceFolder}/test/test_B",
             "presentation": {

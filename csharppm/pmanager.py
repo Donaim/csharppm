@@ -4,7 +4,6 @@ import json
 import mxml
 import props
 
-
 class project:
     def __init__(self, file):
         self.name = "".join(os.path.basename(file).split('.')[:-1])
@@ -42,10 +41,7 @@ class project:
     def add_field(self, val, *path):
         self.__add_field(val, path)
     def __add_field(self, val, path):
-        re = self.dict
-        for i in path[0:-1]:
-            re = re[i]
-        re[path[-1]].append(val)
+        self.__get(path).append(val)
 
 class csproj(project):
     def __init__(self, file):
@@ -70,6 +66,8 @@ class csproj(project):
     def add_reference(self, path, name=None, SourcePath=None):
         if(name == None):
             name = os.path.basename(path).split(sep='.')[0]
+
+        path = os.path.relpath(path, os.path.dirname(self.file)).replace('/', '\\') # canonical styling
 
         field = {"@Include": name, "HintPath": path }
         if SourcePath != None:
