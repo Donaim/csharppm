@@ -32,6 +32,7 @@ def test_sln():
 def test_sln_manager():
     s = slnmng('DModuler.sln')
     s.create_project('lol/lol.csproj', 'COOLTYPE', 'VERSADD')
+    s.create_reference('lol', '/home/d0naim/dev/vutils/vutils/bin/Release/vutils.dll')
 
 
 # make a copy

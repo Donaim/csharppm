@@ -7,7 +7,6 @@ import pmanager as pm
 class slnmng(cssln):
     def __init__(self, file):
         self.slnfile = file
-        self.cwd = os.getcwd()
         self.projects = []
 
         if(path.isfile(self.slnfile)):
@@ -20,19 +19,38 @@ class slnmng(cssln):
         self.save()
     def __load_sln(self):
         for p in self.get_headers():
-            loc = pjoin(self.cwd, p.path)
+            loc = pjoin(slndir, p.path)
             proj = pm.csproj(loc)
             self.projects.append( proj )
 
+    def backup():
+        copy_dir_files(slndir, slndir + '.backup')
+
+    def create_reference(self, project_name, reference_source_dll):
+        copy_dir_files(reference_source_dll, pjoin(slndir, 'ref')) # copy references to local 'ref' folder
+        reference_path = pjoin(slndir, 'ref', path.basename(reference_source_dll))
+        self.add_reference(project_name, reference_path=reference_path, reference_source_dll=reference_source_dll)
+
+    def add_reference(self, project_name, reference_path, reference_source_dll):
+        proj = self.__get_project_by_name(project_name)
+        proj.add_reference(reference_path, None, SourcePath=reference_source_dll)
+        proj.save()
+        
     def create_project(self, file, type = slndata.csharpstdtype, fver = slndata.csharpstdver):
         guid = pm.csproject_creator.get_guid()
         name = path.basename(file).split('.')[0]
 
+        pm.csproject_creator.create(file, pm.csproj_props(name=name, fver=fver, type=type, guid=guid))
+        self.projects.append( pm.csproj(file) )
         self.add_new_project( slnProjInfo(name, file, guid, slndata.csharpguid) )
         self.save()
 
-        pm.csproject_creator.create(file, pm.csproj_props(name=name, fver=fver, type=type, guid=guid))
 
+    def __get_project_by_name(self, name):
+        for h in self.projects:
+            if(h.name == name): return h
+
+        raise Exception("Wrong project name: \"{}\"".format(name))
     def save(self):
         write_file(self.slnfile, str(self))
 

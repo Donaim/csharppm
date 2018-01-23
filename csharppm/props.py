@@ -1,6 +1,7 @@
 
-import inspect, os
+import inspect, os, shutil
 script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+slndir = os.getcwd()
 
 def pjoin(*args):
     re = ""
@@ -21,3 +22,14 @@ def write_file(file, text):
         os.mkdir(os.path.dirname(file))
         write()
         pass
+
+def copy_file(source, destination):
+    if not os.path.isdir(os.path.dirname(destination)): os.mkdir(os.path.dirname(destination))
+    shutil.copy(source, destination)
+
+def copy_dir_files(source, destination):
+    source = os.path.dirname(source)
+    destination = os.path.dirname(destination)
+
+    for f in os.listdir(source):
+        copy_file(os.path.join(source, f), destination)

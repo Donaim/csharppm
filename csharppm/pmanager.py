@@ -7,6 +7,7 @@ import props
 
 class project:
     def __init__(self, file):
+        self.name = "".join(os.path.basename(file).split('.')[:-1])
         self.file = file
         self.dict = mxml.read_xml(self.file)
 
@@ -66,10 +67,15 @@ class csproj(project):
         if(type(self.get('Project', 'ItemGroup', self.ref_group_index, 'Reference')) != type(list())):
             self.set(list(), 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
         
-    def add_reference(self, path, name=None):
+    def add_reference(self, path, name=None, SourcePath=None):
         if(name == None):
             name = os.path.basename(path).split(sep='.')[0]
-        self.add_field({"@Include": name, "HintPath": path }, 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
+
+        field = {"@Include": name, "HintPath": path }
+        if SourcePath != None:
+            field['SourcePath'] = SourcePath
+
+        self.add_field(field, 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
 
 class csproj_props:
     def __init__(self, name, fver, type, guid):

@@ -18,7 +18,7 @@ class parse_methods:
             if(lines[i] == 'Global'):
                 return lines[i+1:-1]
 
-        raise("Wrong sln format")
+        raise Exception("Wrong sln format")
     def get_projects_lines(lines):
         start = 0
         end = len(lines) - 1
