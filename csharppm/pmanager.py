@@ -60,9 +60,23 @@ class csproj(project):
         return len(lst) - 1
 
     def __check_refrence_format(self):
-        if(type(self.get('Project', 'ItemGroup', self.ref_group_index, 'Reference')) != type(list())):
-            self.set(list(), 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
-        
+        if(type(self.get('Project', 'ItemGroup', self.ref_group_index, 'Reference')) != type(OrderedDict())):
+            self.set(OrderedDict(), 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
+    
+    def get_references(self):
+        print(self.getp('Project'))
+        return
+        # re = []
+        # lst = self.get('Project', 'ItemGroup')
+        # print(lst)
+        # return
+
+        for item in lst:
+            if(type(item) != type(OrderedDict())): continue
+            if('Reference' in item.keys()): re.append(item['Reference'])
+
+        return re
+
     def add_reference(self, path, name=None, SourcePath=None):
         if(name == None):
             name = os.path.basename(path).split(sep='.')[0]
@@ -73,7 +87,7 @@ class csproj(project):
         if SourcePath != None:
             field['SourcePath'] = SourcePath
 
-        self.add_field(field, 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
+        self.add_field({'Reference': field}, 'Project', 'ItemGroup')
 
 class csproj_props:
     def __init__(self, name, fver, type, guid):

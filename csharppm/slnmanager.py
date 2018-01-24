@@ -28,12 +28,16 @@ class slnmng(cssln):
         copy_dir_files(path.dirname(reference_source_dll), pjoin(slndir, 'ref')) # copy references to local 'ref' folder
         reference_path = pjoin(slndir, 'ref', path.basename(reference_source_dll))
         self.add_reference(project_name, reference_path=reference_path, reference_source_dll=reference_source_dll)
-
     def add_reference(self, project_name, reference_path, reference_source_dll):
         proj = self.__get_project_by_name(project_name)
         proj.add_reference(reference_path, None, SourcePath=reference_source_dll)
         proj.save()
-        
+    def update_references(self):
+        raise NotImplementedError()
+    def list_proj_references(self, project_name):
+        proj = self.__get_project_by_name(project_name)
+        print(proj.get_references())
+
     def create_project(self, file, type = slndata.csharpstdtype, fver = slndata.csharpstdver):
         guid = pm.csproject_creator.get_guid()
         name = path.basename(file).split('.')[0]
