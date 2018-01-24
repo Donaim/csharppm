@@ -88,8 +88,9 @@ class MParser(object):
         self.project_actions = {
             'addref' : self.project_add_reference,
             }
-        
-        parser = argparse.ArgumentParser(description='Project subparser')
+
+        usage = ('{} {} command:{}'.format(props.script_name, self.current_project, list(self.project_actions.keys()))).replace('[', '{').replace(']', '}').replace('\'', "")
+        parser = argparse.ArgumentParser(description='Project subparser', usage=usage)
         parser.add_argument('command', help='Project command {} '.format(list(self.sln_actions.keys())))
         args = parser.parse_args(sys.argv[2:3])
         
@@ -101,7 +102,7 @@ class MParser(object):
         raise Exception("Wrong command \"{}\" expected to be: {}".format(args.command, list(self.project_actions.keys())))
 
     def project_add_reference(self):
-        parser = argparse.ArgumentParser(description='Gets add reference arguments')
+        parser = argparse.ArgumentParser(description='Gets add reference arguments', usage='{} {} addref fullpath'.format(props.script_name, self.current_project))
         parser.add_argument('fullpath', help='Path to source dll (gonna be copied to \"\\ref\" folder)')
 
         args = parser.parse_args(sys.argv[3:])
