@@ -8,6 +8,8 @@ import props, slndata
 import argparse
 import slnmanager
 
+# print(sys.argv)
+
 class helper:
     def get_sln_file():
         for f in os.listdir(props.slndir):
@@ -24,7 +26,7 @@ class MParser(object):
         
     def parse_command(self):
         self.parser.add_argument('command', help='Subcommand to run')
-        args = self.parser.parse_args(sys.argv[2:3])
+        args = self.parser.parse_args(sys.argv[1:2])
         for k, v in self.sln_actions.items():
             if(k == args.command): 
                 v()

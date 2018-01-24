@@ -1,9 +1,7 @@
 #! /usr/bin/python3
 
-# script for runnig on linux
-
 import os, sys
 
-args= " ".join(sys.argv)
+args= " ".join(sys.argv[1:])
 
 os.system('~/dev/csharp_project_manager/csharppm/__init__.py ' + args)
