@@ -30,7 +30,7 @@ class MParser(object):
             'updateref': self.update_references,
             }
         
-        parser = argparse.ArgumentParser(description='C# project manager', usage=slndata.stript_usage_info)
+        parser = argparse.ArgumentParser(usage=slndata.stript_usage_info)
         parser.add_argument('command', help='Solution command {} or project name {}'.format(list(self.sln_actions.keys()), self.get_project_names()))
         args = parser.parse_args(sys.argv[1:2])
 
@@ -89,17 +89,17 @@ class MParser(object):
             'addref' : self.project_add_reference,
             }
 
-        usage = ('{} {} command:{}'.format(props.script_name, self.current_project, list(self.project_actions.keys()))).replace('[', '{').replace(']', '}').replace('\'', "")
+        usage = ('{} {} proj_command:{}'.format(props.script_name, self.current_project, list(self.project_actions.keys()))).replace('[', '{').replace(']', '}').replace('\'', "")
         parser = argparse.ArgumentParser(description='Project subparser', usage=usage)
-        parser.add_argument('command', help='Project command {} '.format(list(self.sln_actions.keys())))
+        parser.add_argument('proj_command', help='Project command {} '.format(list(self.sln_actions.keys())))
         args = parser.parse_args(sys.argv[2:3])
         
         for k, v in self.project_actions.items():
-            if(k == args.command): 
+            if(k == args.proj_command): 
                 v()
                 return
         
-        raise Exception("Wrong command \"{}\" expected to be: {}".format(args.command, list(self.project_actions.keys())))
+        raise Exception("Wrong proj_command \"{}\" expected to be: {}".format(args.proj_command, list(self.project_actions.keys())))
 
     def project_add_reference(self):
         parser = argparse.ArgumentParser(description='Gets add reference arguments', usage='{} {} addref fullpath'.format(props.script_name, self.current_project))

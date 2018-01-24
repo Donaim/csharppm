@@ -29,9 +29,7 @@ csharpstdver = '4.5.2'
 
 
 stript_usage_info =\
-'''{} <command> [<args>]
-
-The most commonly used git commands are:
-   commit     Record changes to the repository
-   fetch      Download objects and refs from another repository
+'''
+{} \t command   proj_command    [<args>]
+   \t command   [<args>]
 '''.format(props.script_name)
