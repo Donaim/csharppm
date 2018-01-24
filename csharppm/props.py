@@ -30,8 +30,6 @@ def copy_file(source, destination):
     shutil.copy(source, destination)
 
 def copy_dir_files(source, destination):
-    source = os.path.dirname(source)
-    destination = os.path.dirname(destination)
-
+    if not os.path.isdir(destination): os.mkdir(destination)
     for f in os.listdir(source):
         copy_file(os.path.join(source, f), destination)
