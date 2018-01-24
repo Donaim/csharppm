@@ -5,14 +5,14 @@ import props
 def find_all_0tag(curr, name):
     re = []
     for c in curr:
-        if(c.tag.endswith(name)): return re.append(c)
+        if(etree.QName(c).localname == name): return re.append(c)
     return re
 def find_0tag(curr, name):
     for c in curr:
-        if(c.tag.endswith(name)): return c
+        if(etree.QName(c).localname == name): return c
     return None
 def find_tag(curr, name): # only first occurence returned | None
-    if(curr.tag.endswith(name)): return curr
+    if(etree.QName(curr).localname == name): return curr
     else:
         for c in curr:
             f = find_tag(c, name)
@@ -21,7 +21,7 @@ def find_tag(curr, name): # only first occurence returned | None
 def find_all_tags(root, name): # returned all occurences list | []
     re = []
     def find_local(curr):
-        if(curr.tag.endswith(name)): re.append(curr)
+        if(etree.QName(curr).localname == name): re.append(curr)
         for c in curr: find_local(c)
     find_local(root)
     return re

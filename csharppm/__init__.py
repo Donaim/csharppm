@@ -81,8 +81,11 @@ class MParser(object):
 
         self.sln_mgr.create_project(args.file, args.type, args.fver)
         print("Project {} added to {} solution".format(args.file, self.sln_name))
-    def update_references():
-        raise NotImplementedError()
+    def update_references(self):
+        if 'updateref.sh' in os.listdir(props.slndir):
+            print("Found \"updateref.sh\" file in solution directory -> executing it!")
+            os.system(props.pjoin(props.slndir, 'updateref.sh'))
+        self.sln_mgr.update_references()
 
     def parse_project(self):
         self.project_actions = {
