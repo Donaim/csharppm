@@ -19,17 +19,29 @@ class MParser(object):
     def __init__(self):
         self.get_objects()
 
-        parser = argparse.ArgumentParser(description='C# project manager', usage=slndata.stript_usage_info)
+        self.parser = argparse.ArgumentParser(description='C# project manager', usage=slndata.stript_usage_info)
+        self.parse_command()
         
-        parser.add_argument('command', help='Subcommand to run')
-        args = parser.parse_args(sys.argv[1:2])
-        # if not hasattr(self, args.command):
-        #     print('Unrecognized command')
-        #     parser.print_help()
-        #     exit(1)
-        # getattr(self, args.command)()
+    def parse_command(self):
+        self.parser.add_argument('command', help='Subcommand to run')
+        args = self.parser.parse_args(sys.argv[2:3])
+        for k, v in self.sln_actions.items():
+            if(k == args.command): 
+                v()
+                return
+        for p in self.projects:
+            if(p == args.command):
+                self.parse_project(p)
+                return
+        
+        raise Exception("Wrong command \"{}\" expected to be: [{}]".format(args.command, self.projects + list(self.sln_actions.keys())))
+
+    def parse_project(self, project_name):
+        print("Parsing {} project ".format(project_name))
+
     def get_objects(self):
         self.sln_file = helper.get_sln_file()
+        self.sln_name = os.path.basename(self.sln_file).split('.')[0]
 
         self.sln_actions = {
             'addproj': self.add_proj, 
@@ -37,13 +49,12 @@ class MParser(object):
         
         self.sln_mgr = slnmanager.slnmng(self.sln_file)
         self.projects = self.sln_mgr.get_project_names()
-        # print(self.projects)
         
 
     def backup(self):
-        print("backing up {} ".format(solname))
+        print("backing up {} ".format(self.sln_name))
     def add_proj(self):
-        print("adding project to {}".format(solname))
+        print("adding project to {}".format(self.sln_name))
 
     def commit(self):
         parser = argparse.ArgumentParser(
