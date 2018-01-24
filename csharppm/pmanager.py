@@ -1,26 +1,32 @@
 import os, inspect, random, string
 from collections import OrderedDict
-import json
-import mxml
+from lxml import etree # http://lxml.de/installation.html
 import props
+import mxml
 
 class project:
     def __init__(self, file):
         self.name = "".join(os.path.basename(file).split('.')[:-1])
         self.file = file
-        self.dict = mxml.read_xml(self.file)
+        self.tree = mxml.read_xml_tree(self.file)
+        self.root = self.tree.getroot()
+
+        self.namespace = etree.QName(self.root).namespace
+        if self.namespace != None and len(self.namespace) > 0:
+            self.namespace = '{' + self.namespace + '}'
 
     def save(self):
-        mxml.write_xml(self.file, self.dict, pretty=True)
+        mxml.write_xml(self.file, self.root)
     def print(self):
-        print(mxml.print_dict(self.dict))
+        print(mxml.print_dict(self.root))
     def print(self, *path):
         print(self.__getp(path))
 
     def __get(self, path):
-        re = self.dict
+        re = self.root
         for i in path:
-            re = re[i]
+            re = mxml.find_0tag(i, re)
+            if re == None: return None
         return re
     def get(self, *path):
         return self.__get(path)
@@ -28,54 +34,30 @@ class project:
         return self.__getp(path)
     def __getp(self, path):
         re = self.__get(path)
-        return json.dumps(re, sort_keys=True, indent=4)
+        return etree.tostring(re, pretty_print=True)
     
-    def __set(self, val, path):
-        re = self.dict
-        for i in path[0:-1]:
-            re = re[i]
-        re[path[-1]] = val
+    def __set(self, tag, path):
+        g = self.__get(path)
+        g.text 
     def set(self, val, *path):
         self.__set(val, path)
 
-    def add_field(self, val, *path):
-        self.__add_field(val, path)
-    def __add_field(self, val, path):
-        self.__get(path).append(val)
+
+    def add_field(self, tag, *path):
+        return self.__add_field(tag, path)
+    def __add_field(self, tag, path):
+        return etree.SubElement(self.__get(path), val)
 
 class csproj(project):
     def __init__(self, file):
         project.__init__(self, file)
-        self.ref_group_index = self.__get_ref_group()
         self.__check_refrence_format()
 
-    def get_ref_group_index(self): self.ref_group_index
-    def __get_ref_group(self):
-        lst = self.get('Project', 'ItemGroup')
-        for i in range(len(lst)):
-            if(type(lst[i]) != type(OrderedDict())): continue
-            if('Reference' in lst[i].keys()): return i
-        
-        lst.append(OrderedDict({'Reference': list()}))
-        return len(lst) - 1
-
     def __check_refrence_format(self):
-        if(type(self.get('Project', 'ItemGroup', self.ref_group_index, 'Reference')) != type(OrderedDict())):
-            self.set(OrderedDict(), 'Project', 'ItemGroup', self.ref_group_index, 'Reference')
+        pass
     
     def get_references(self):
-        print(self.getp('Project'))
-        return
-        # re = []
-        # lst = self.get('Project', 'ItemGroup')
-        # print(lst)
-        # return
-
-        for item in lst:
-            if(type(item) != type(OrderedDict())): continue
-            if('Reference' in item.keys()): re.append(item['Reference'])
-
-        return re
+        return mxml.find_all_tags('Reference')
 
     def add_reference(self, path, name=None, SourcePath=None):
         if(name == None):
@@ -83,11 +65,13 @@ class csproj(project):
 
         path = os.path.relpath(path, os.path.dirname(self.file)).replace('/', '\\') # canonical styling
 
-        field = {"@Include": name, "HintPath": path }
+        itemg = self.get('ItemGroup')
+        refEl = etree.SubElement(itemg, self.namespace + 'Reference', {'Include': name})
+        hintEl = etree.SubElement(refEl, self.namespace + 'HintPath')
+        hintEl.text = path
         if SourcePath != None:
-            field['SourcePath'] = SourcePath
-
-        self.add_field({'Reference': field}, 'Project', 'ItemGroup')
+            sourceEl = etree.SubElement(refEl, self.namespace + 'SourcePath')
+            sourceEl.text = SourcePath
 
 class csproj_props:
     def __init__(self, name, fver, type, guid):

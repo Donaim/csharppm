@@ -16,10 +16,10 @@ def test_mxml():
 
 def test_pmanager():
     p = pm.project('tmp.csproj')
-    p.print('Project', 'PropertyGroup', 0)
-    p.set('KEK1', 'Project', 'PropertyGroup', 0, 'AssemblyName')
-    p.print('Project', 'PropertyGroup', 0)
-    p.save()
+    p.print('ItemGroup')
+    # p.set('KEK1', 'Project', 'PropertyGroup', 0, 'AssemblyName')
+    # p.print('Project', 'PropertyGroup', 0)
+    # p.save()
 def test_csproj():
     p = pm.csproj('tmp.csproj')
     p.add_reference('vutils/lul.dll')
@@ -36,13 +36,18 @@ def test_sln_manager():
     s.create_reference('lol', '/home/d0naim/dev/vutils/vutils/bin/Release/vutils.dll')
 
 def test_new_xml():
-    root = etree.XML(props.read_file('tmp.csproj'))
-    # print(root.tag)
+    # root = etree.XML(props.read_file('tmp.csproj'))
+    root = mxml.read_xml('tmp.csproj')
+    print(etree.QName(root).localname)
+    print(root.tag)
+    root.tag = 'HADHD'
+    print(root.tag)
 
     
     # ffff = mxml.find_tag('Optimize', root)
-    ffff = mxml.find_all_tags('Optimize', root)
-    print(ffff)
+    # ffff = mxml.find_all_tags('Optimize', root)
+    # print(ffff)
+
 
 # make a copy
 props.write_file('tmp.csproj', props.read_file(os.path.join(props.script_dir, 'template.csproj')))
@@ -53,5 +58,5 @@ print("TESTING")
 # test_pmanager()
 # test_csproj()
 # test_sln()
-# test_sln_manager()
-test_new_xml()
+test_sln_manager()
+# test_new_xml()
