@@ -57,6 +57,8 @@ class slnmng(cssln):
             sourcepath = "Unknown source"
             if sourceEl != None: sourcepath = sourceEl.text
             print("{} {} = \"{}\" [{}]".format(etree.QName(r).localname, r.get("Include") , hintpath, sourcepath))
+        for r in mxml.find_all_tags(proj.root, 'ProjectReference'):
+            print("{} {}".format(etree.QName(r).localname, r.get("Include")))
 
     def create_project(self, file, type = slndata.csharpstdtype, fver = slndata.csharpstdver):
         guid = pm.csproject_creator.get_guid()
