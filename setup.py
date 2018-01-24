@@ -11,6 +11,6 @@ setup(
     description=('C# project manager'),
     license='GNU',
     packages=['csharppm'],
-    install_requires=['xmltodict'],
+    install_requires=['lxml'],
 )
 

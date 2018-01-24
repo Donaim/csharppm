@@ -6,7 +6,7 @@
         {
             "label": "testA",
             "type": "shell",
-            "command": "cd ${workspaceFolder}/test/test_sol ; python3 ../../csharppm/__init__.py",
+            "command": "cd ${workspaceFolder}/test/test_sol ; python3 ../../csharppm/test.py",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -22,7 +22,7 @@
         {
             "label": "cleanForB",
             "type": "shell",
-            "command": "rm -r ${workspaceFolder}/test/test_B/* ; mkdir -p ${workspaceFolder}/test/test_B",
+            "command": "rm -rf ${workspaceFolder}/test/test_B/* ; mkdir -p ${workspaceFolder}/test/test_B",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
@@ -39,7 +39,7 @@
             "label": "testB",
             "dependsOn": "cleanForB",
             "type": "shell",
-            "command": "cd ${workspaceFolder}/test/test_B ; python3 ${workspaceFolder}/csharppm/__init__.py",
+            "command": "cd ${workspaceFolder}/test/test_B ; python3 ${workspaceFolder}/csharppm/test.py",
             "presentation": {
                 "echo": true,
                 "reveal": "always",
