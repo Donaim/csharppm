@@ -2,23 +2,23 @@
 from lxml import etree # http://lxml.de/installation.html
 import props
 
-def find_all_0tag(name, curr):
+def find_all_0tag(curr, name):
     re = []
     for c in curr:
         if(c.tag.endswith(name)): return re.append(c)
     return re
-def find_0tag(name, curr):
+def find_0tag(curr, name):
     for c in curr:
         if(c.tag.endswith(name)): return c
     return None
-def find_tag(name, curr): # only first occurence returned | None
+def find_tag(curr, name): # only first occurence returned | None
     if(curr.tag.endswith(name)): return curr
     else:
         for c in curr:
-            f = find_tag(name, c)
+            f = find_tag(c, name)
             if f != None: return f
         return None
-def find_all_tags(name, root): # returned all occurences list | []
+def find_all_tags(root, name): # returned all occurences list | []
     re = []
     def find_local(curr):
         if(curr.tag.endswith(name)): re.append(curr)

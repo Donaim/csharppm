@@ -3,6 +3,8 @@ from props import *
 from slnparser import *
 from os import path
 import pmanager as pm
+from lxml import etree
+import mxml
 
 class slnmng(cssln):
     def __init__(self, file):
@@ -36,7 +38,12 @@ class slnmng(cssln):
         raise NotImplementedError()
     def list_proj_references(self, project_name):
         proj = self.__get_project_by_name(project_name)
-        print(proj.get_references())
+        for r in proj.get_references():
+            hintEl = mxml.find_0tag(r, 'HintPath')
+            sourceEl = mxml.find_0tag(r, 'SourcePath')
+            sourcepath = "Unknown source"
+            if sourceEl != None: sourcepath = sourceEl.text
+            print("{} = \"{}\" [{}]".format(etree.QName(r).localname, hintEl.text, sourcepath))
 
     def create_project(self, file, type = slndata.csharpstdtype, fver = slndata.csharpstdver):
         guid = pm.csproject_creator.get_guid()

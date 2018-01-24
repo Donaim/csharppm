@@ -25,7 +25,7 @@ class project:
     def __get(self, path):
         re = self.root
         for i in path:
-            re = mxml.find_0tag(i, re)
+            re = mxml.find_0tag(re, i)
             if re == None: return None
         return re
     def get(self, *path):
@@ -57,7 +57,7 @@ class csproj(project):
         pass
     
     def get_references(self):
-        return mxml.find_all_tags('Reference')
+        return mxml.find_all_tags(self.root, 'Reference')
 
     def add_reference(self, path, name=None, SourcePath=None):
         if(name == None):

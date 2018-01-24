@@ -34,19 +34,20 @@ def test_sln_manager():
     s = slnmng('DModuler.sln')
     s.create_project('lol/lol.csproj', 'COOLTYPE', 'VERSADD')
     s.create_reference('lol', '/home/d0naim/dev/vutils/vutils/bin/Release/vutils.dll')
+    s.list_proj_references('lol')
 
 def test_new_xml():
     # root = etree.XML(props.read_file('tmp.csproj'))
-    root = mxml.read_xml('tmp.csproj')
+    root = mxml.read_xml_tree('tmp.csproj').getroot()
     print(etree.QName(root).localname)
     print(root.tag)
     root.tag = 'HADHD'
     print(root.tag)
 
     
-    # ffff = mxml.find_tag('Optimize', root)
-    # ffff = mxml.find_all_tags('Optimize', root)
-    # print(ffff)
+    # ffff = mxml.find_tag(root, 'Optimize')
+    ffff = mxml.find_all_tags(root, 'Optimize')
+    print(ffff)
 
 
 # make a copy
