@@ -3,7 +3,7 @@
 # import test
 # import entry
 import props
-import sys, os
+import sys, os, shutil
 import props, slndata
 import argparse
 import slnmanager
@@ -15,7 +15,7 @@ class helper:
         for f in os.listdir(props.slndir):
             if(f.endswith('.sln')):
                 return os.path.join(props.slndir, f)
-        return props.pjoin(props.slndir, os.path.basename(props.slndir) + '.sln')
+        return None
 
 class MParser(object):
     def __init__(self):
@@ -25,7 +25,7 @@ class MParser(object):
         self.parse_command()
         
     def parse_command(self):
-        self.parser.add_argument('command', help='Subcommand to run')
+        self.parser.add_argument('command', help='Solution command {} or project name {}'.format(list(self.sln_actions.keys()), self.projects))
         args = self.parser.parse_args(sys.argv[1:2])
         for k, v in self.sln_actions.items():
             if(k == args.command): 
@@ -43,19 +43,31 @@ class MParser(object):
 
     def get_objects(self):
         self.sln_file = helper.get_sln_file()
-        self.sln_name = os.path.basename(self.sln_file).split('.')[0]
+        if self.sln_file != None: self.sln_name = os.path.basename(self.sln_file).split('.')[0]
+        else: self.sln_name = ""
 
+        self.projects = [] # they will initialize later
         self.sln_actions = {
+            'init' : self.init_solution,
             'addproj': self.add_proj, 
             'backup': self.backup}
-        
+
+        if self.sln_file != None:        
+            self.init_solution()
+
+    def init_solution(self):
+        self.sln_file = props.pjoin(props.slndir, os.path.basename(props.slndir) + '.sln')
         self.sln_mgr = slnmanager.slnmng(self.sln_file)
         self.projects = self.sln_mgr.get_project_names()
-        
 
     def backup(self):
-        print("backing up {} ".format(self.sln_name))
+        shutil.copytree(props.slndir, props.slndir + '.backup')
+        print("{} was backed up successfuly".format(self.sln_name))
+
     def add_proj(self):
+        if(self.sln_file == None): 
+            self.init_solution()
+            # raise Exception("Create solution first with \"{} init\"".format(props.script_name))
         print("adding project to {}".format(self.sln_name))
 
     def commit(self):

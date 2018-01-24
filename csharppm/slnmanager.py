@@ -23,9 +23,6 @@ class slnmng(cssln):
             proj = pm.csproj(loc)
             self.projects.append( proj )
 
-    def backup():
-        copy_dir_files(slndir, slndir + '.backup')
-
     def create_reference(self, project_name, reference_source_dll):
         copy_dir_files(reference_source_dll, pjoin(slndir, 'ref')) # copy references to local 'ref' folder
         reference_path = pjoin(slndir, 'ref', path.basename(reference_source_dll))
