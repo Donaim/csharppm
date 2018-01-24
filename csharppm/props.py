@@ -1,7 +1,9 @@
 
 import inspect, os, shutil
+
 script_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 slndir = os.getcwd()
+script_name = 'cspm'
 
 def pjoin(*args):
     re = ""

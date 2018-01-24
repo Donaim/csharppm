@@ -37,7 +37,7 @@
         },
         {
             "label": "testB",
-            "dependsOn": "removeForB",
+            "dependsOn": "cleanForB",
             "type": "shell",
             "command": "cd ${workspaceFolder}/test/test_B ; python3 ${workspaceFolder}/csharppm/__init__.py",
             "presentation": {

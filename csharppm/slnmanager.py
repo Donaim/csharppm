@@ -51,6 +51,9 @@ class slnmng(cssln):
             if(h.name == name): return h
 
         raise Exception("Wrong project name: \"{}\"".format(name))
+    def get_project_names(self):
+        return list(map(lambda p: p.name, self.projects))
+
     def save(self):
         write_file(self.slnfile, str(self))
 

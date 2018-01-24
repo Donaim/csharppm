@@ -1,4 +1,4 @@
-
+import props
 
 intro = \
 """﻿
@@ -26,3 +26,12 @@ default_headers = [
 csharpguid = '{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}'
 csharpstdtype = "Library"
 csharpstdver = '4.5.2'
+
+
+stript_usage_info =\
+'''{} <command> [<args>]
+
+The most commonly used git commands are:
+   commit     Record changes to the repository
+   fetch      Download objects and refs from another repository
+'''.format(props.script_name)
