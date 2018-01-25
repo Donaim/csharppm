@@ -53,14 +53,18 @@ class MParser(object):
 
     def get_objects(self):
         self.sln_file = helper.get_sln_file()
-        self.init_solution()
-
+        self.init_solution_objects()
+	
     def init_solution(self): 
         if self.sln_file == None: 
             self.sln_file = props.pjoin(props.slndir, os.path.basename(props.slndir) + '.sln') # creates new solution file
+        self.init_solution_objects()
+    def init_solution_objects(self):
+        if self.sln_file == None: return
         self.sln_name = os.path.basename(self.sln_file).split('.')[0]
         self.sln_mgr = slnmanager.slnmng(self.sln_file)
-    
+	    
+
     def backup(self):
         shutil.copytree(props.slndir, props.slndir + '.backup')
         print("{} was backed up successfuly".format(self.sln_name))
@@ -82,6 +86,9 @@ class MParser(object):
         self.sln_mgr.create_project(args.file, args.type, args.fver)
         print("Project {} added to {} solution".format(args.file, self.sln_name))
     def update_references(self):
+        if(self.sln_file == None): 
+            raise Exception("Create solution first with \"{} init\"".format(props.script_name))
+
         if 'updateref.sh' in os.listdir(props.slndir):
             print("Found \"updateref.sh\" file in solution directory -> executing it!")
             os.system(props.pjoin(props.slndir, 'updateref.sh'))
