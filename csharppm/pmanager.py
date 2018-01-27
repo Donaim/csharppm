@@ -65,12 +65,13 @@ class csproj(project):
 
     def get_references(self):
         return mxml.find_all_tags(self.root, 'Reference')
-
+    
+    def get_canonical_path(self, path):
+        return os.path.relpath(path, os.path.dirname(self.file)).replace('/', '\\') # canonical styling
     def add_reference(self, path, name=None, SourcePath=None):
         if(name == None):
             name = os.path.basename(path).split(sep='.')[0]
-
-        path = os.path.relpath(path, os.path.dirname(self.file)).replace('/', '\\') # canonical styling
+        path = self.get_canonical_path(path)
 
         itemg = self.get('ItemGroup')
         refEl = etree.SubElement(itemg, self.namespace + 'Reference', {'Include': name})
@@ -79,10 +80,18 @@ class csproj(project):
         if SourcePath != None:
             sourceEl = etree.SubElement(refEl, self.namespace + 'SourcePath')
             sourceEl.text = SourcePath
-    def __add_reference_to_proj(self, path):
+    def add_reference_to_proj(self, path):
+        targetproj = csproj(path)
+        p = targetproj.get_props()
 
-
-        raise NotImplementedError()
+        path = self.get_canonical_path(path)
+        
+        itemg = self.get('ItemGroup')
+        refEl = etree.SubElement(itemg, self.namespace + 'ProjectReference', {'Include': path})
+        guidEl = etree.SubElement(refEl, self.namespace + 'Project')
+        guidEl.text = p.guid
+        nameEl = etree.SubElement(refEl, self.namespace + 'Name')
+        nameEl.text = p.name
 
 
 class csproj_props:

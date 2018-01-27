@@ -34,6 +34,10 @@ class slnmng(cssln):
         proj = self.__get_project_by_name(project_name)
         proj.add_reference(reference_path, None, SourcePath=reference_source_dll)
         proj.save()
+    def add_reference_to_proj(self, project_name, destination_project_path):
+        proj = self.__get_project_by_name(project_name)
+        proj.add_reference_to_proj(destination_project_path)
+        proj.save()
     def __update_ref(self, source_dll):
         if not path.isfile(source_dll): raise Exception("Source dll ({}) does not exist!".format(source_dll))
         copy_dir_files(path.dirname(source_dll), pjoin(slndir, 'ref')) # copy references to local 'ref' folder

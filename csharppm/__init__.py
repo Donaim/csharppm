@@ -119,9 +119,13 @@ class MParser(object):
 
         args = parser.parse_args(sys.argv[3:])
 
-        self.sln_mgr.create_reference(self.current_project, args.fullpath)
+        if args.fullpath.split('.')[-1] == 'csproj':
+            self.sln_mgr.add_reference_to_proj(self.current_project, args.fullpath)
+            print("ProjectReference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
+        else:
+            self.sln_mgr.create_reference(self.current_project, args.fullpath)
+            print("Reference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
 
-        print("Reference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
     def list_proj_references(self):
         self.sln_mgr.list_proj_references(self.current_project)
     def show_proj_info(self):
