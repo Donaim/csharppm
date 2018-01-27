@@ -56,6 +56,13 @@ class csproj(project):
     def __check_refrence_format(self):
         pass
     
+    def get_props(self):
+        name = self.get('PropertyGroup', 'AssemblyName').text
+        fver = self.get('PropertyGroup', 'TargetFrameworkVersion').text
+        type = mxml.find_tag(self.root, 'OutputType').text
+        guid = self.get('PropertyGroup', 'ProjectGuid').text
+        return csproj_props(name=name, fver=fver, type=type, guid=guid)
+
     def get_references(self):
         return mxml.find_all_tags(self.root, 'Reference')
 
@@ -72,6 +79,11 @@ class csproj(project):
         if SourcePath != None:
             sourceEl = etree.SubElement(refEl, self.namespace + 'SourcePath')
             sourceEl.text = SourcePath
+    def __add_reference_to_proj(self, path):
+
+
+        raise NotImplementedError()
+
 
 class csproj_props:
     def __init__(self, name, fver, type, guid):

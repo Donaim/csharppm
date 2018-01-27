@@ -59,6 +59,11 @@ class slnmng(cssln):
             print("{} {} = \"{}\" [{}]".format(etree.QName(r).localname, r.get("Include") , hintpath, sourcepath))
         for r in mxml.find_all_tags(proj.root, 'ProjectReference'):
             print("{} {}".format(etree.QName(r).localname, r.get("Include")))
+    def show_proj_info(self, project_name):
+        proj = self.__get_project_by_name(project_name)
+        for k, v in vars(proj.get_props()).items():
+            print("{}: {}".format(k, v))
+
 
     def create_project(self, file, type = slndata.csharpstdtype, fver = slndata.csharpstdver):
         guid = pm.csproject_creator.get_guid()

@@ -98,6 +98,7 @@ class MParser(object):
         self.project_actions = {
             'addref' : self.project_add_reference,
             'listref' : self.list_proj_references,
+            'info': self.show_proj_info,
             }
 
         usage = ('{} {} proj_command:{}'.format(props.script_name, self.current_project, list(self.project_actions.keys()))).replace('[', '{').replace(']', '}').replace('\'', "")
@@ -123,6 +124,9 @@ class MParser(object):
         print("Reference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
     def list_proj_references(self):
         self.sln_mgr.list_proj_references(self.current_project)
+    def show_proj_info(self):
+        self.sln_mgr.show_proj_info(self.current_project)
+
 
 if __name__ == "__main__":
     MParser()
