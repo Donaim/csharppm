@@ -99,6 +99,7 @@ class MParser(object):
             'addref' : self.project_add_reference,
             'listref' : self.list_proj_references,
             'info': self.show_proj_info,
+            'rm': self.project_remove
             }
 
         usage = ('{} {} proj_command:{}'.format(props.script_name, self.current_project, list(self.project_actions.keys()))).replace('[', '{').replace(']', '}').replace('\'', "")
@@ -130,7 +131,15 @@ class MParser(object):
         self.sln_mgr.list_proj_references(self.current_project)
     def show_proj_info(self):
         self.sln_mgr.show_proj_info(self.current_project)
+    def project_remove(self):
+        parser = argparse.ArgumentParser(description='Gets remove project arguments', usage='{} {} rm [{{--rm-files, --keep-files}}]'.format(props.script_name, self.current_project))
+        parser.add_argument('--rm-files', dest='files', action='store_true', help='Check if remove project files also')
+        parser.add_argument('--keep-files', dest='files', action='store_false', help='Check if dont remove project files')
+        parser.set_defaults(files=True)
 
+        args = parser.parse_args(sys.argv[3:])
+
+        self.sln_mgr.remove_project(self.current_project, args.files)
 
 if __name__ == "__main__":
     MParser()

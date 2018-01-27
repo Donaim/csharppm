@@ -1,4 +1,4 @@
-import random, os
+import random, os, shutil
 from props import *
 from slnparser import *
 from os import path
@@ -47,10 +47,7 @@ class slnmng(cssln):
                 sourceEl = mxml.find_0tag(r, 'SourcePath')
                 if sourceEl != None: 
                     sourcepath = sourceEl.text
-                    try:
-                        __update_ref(sourcepath)
-                    except:
-                        print(args="Source dll ({}) does not exist!".format(sourcepath), file=sys.stderr)
+                    __update_ref(sourcepath)
     def list_proj_references(self, project_name):
         proj = self.__get_project_by_name(project_name)
         for r in proj.get_references():
@@ -77,7 +74,21 @@ class slnmng(cssln):
         self.projects.append( pm.csproj(file) )
         self.add_new_project( slnProjInfo(name, file, guid, slndata.csharpguid) )
         self.save()
+    def remove_project(self, project_name, delete_directory):
+        proj = self.__get_project_by_name(project_name)
+        self.projects.remove(proj)
+        for h in self.headers:
+            if h.name == project_name: 
+                self.headers.remove(h)
+                break
+        self.save()
+        print("Project ({}) was removed from slnfile successfuly".format(project_name))
 
+        if delete_directory:
+            self.__delete_project_directory(path.dirname(proj.file))
+    def __delete_project_directory(self, dir_path):
+        shutil.rmtree(dir_path)
+        print("Project directory ({}) was removed successfuly".format(dir_path))
 
     def __get_project_by_name(self, name):
         for h in self.projects:
