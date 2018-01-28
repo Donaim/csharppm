@@ -10,6 +10,11 @@ def pjoin(*args):
     for p in args:
         re = os.path.join(re, p)
     return re.replace('\\', os.sep).replace(os.sep + os.sep, os.sep)
+def file_extension(path):
+    name = os.path.basename(path)
+    split = name.split('.')
+    if len(split) == 1: return ""
+    else: return split[-1]
 
 def read_file(file):
     with open(file, 'r') as f:

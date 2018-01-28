@@ -119,14 +119,19 @@ class MParser(object):
         parser.add_argument('fullpath', help='Path to source dll (gonna be copied to \"\\ref\" folder)')
 
         args = parser.parse_args(sys.argv[3:])
+        ext = props.file_extension(args.fullpath)
 
-        if args.fullpath.split('.')[-1] == 'csproj':
-            self.sln_mgr.add_reference_to_proj(self.current_project, args.fullpath)
-            print("ProjectReference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
-        else:
-            self.sln_mgr.create_reference(self.current_project, args.fullpath)
-            print("Reference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
-
+        if os.path.isfile(args.fullpath):
+            if ext == 'csproj':
+                self.sln_mgr.add_reference_to_proj(self.current_project, args.fullpath)
+                print("ProjectReference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
+            else:
+                self.sln_mgr.create_reference(self.current_project, args.fullpath)
+                print("Reference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
+        else: # must be system reference
+            self.sln_mgr.add_system_reference(self.current_project, args.fullpath)
+            print("System reference \"{}\" added to project {} ".format(args.fullpath, self.current_project))
+     
     def list_proj_references(self):
         self.sln_mgr.list_proj_references(self.current_project)
     def show_proj_info(self):

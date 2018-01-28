@@ -92,7 +92,9 @@ class csproj(project):
         guidEl.text = p.guid
         nameEl = etree.SubElement(refEl, self.namespace + 'Name')
         nameEl.text = p.name
-
+    def add_system_reference(self, name): # like System.Drawing or System.Windows.Forms
+        itemg = self.get('ItemGroup')
+        refEl = etree.SubElement(itemg, self.namespace + 'Reference', {'Include': name})
 
 class csproj_props:
     def __init__(self, name, fver, type, guid):

@@ -25,7 +25,6 @@ class slnmng(cssln):
             proj = pm.csproj(loc)
             self.projects.append( proj )
 
-
     def create_reference(self, project_name, reference_source_dll):
         self.__update_ref(reference_source_dll)
         reference_path = pjoin(slndir, 'ref', path.basename(reference_source_dll))
@@ -38,6 +37,10 @@ class slnmng(cssln):
         proj = self.__get_project_by_name(project_name)
         proj.add_reference_to_proj(destination_project_path)
         proj.save()
+    def add_system_reference(self, project_name, reference_name):
+        proj = self.__get_project_by_name(project_name)
+        proj.add_system_reference(reference_name)
+        proj.save()
     def __update_ref(self, source_dll):
         if not path.isfile(source_dll): raise Exception("Source dll ({}) does not exist!".format(source_dll))
         copy_dir_files(path.dirname(source_dll), pjoin(slndir, 'ref')) # copy references to local 'ref' folder
@@ -47,7 +50,7 @@ class slnmng(cssln):
                 sourceEl = mxml.find_0tag(r, 'SourcePath')
                 if sourceEl != None: 
                     sourcepath = sourceEl.text
-                    __update_ref(sourcepath)
+                    self.__update_ref(sourcepath)
     def list_proj_references(self, project_name):
         proj = self.__get_project_by_name(project_name)
         for r in proj.get_references():
