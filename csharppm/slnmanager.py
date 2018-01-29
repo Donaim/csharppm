@@ -24,6 +24,8 @@ class slnmng(cssln):
             loc = pjoin(slndir, p.path)
             proj = pm.csproj(loc)
             self.projects.append( proj )
+            if not proj.ok:
+                print("Project {} (at \"{}\") filed to load".format(proj.name, loc))
 
     def create_reference(self, project_name, reference_source_dll):
         self.__update_ref(reference_source_dll)

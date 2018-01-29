@@ -8,12 +8,20 @@ class project:
     def __init__(self, file):
         self.name = "".join(os.path.basename(file).split('.')[:-1])
         self.file = file
-        self.tree = mxml.read_xml_tree(self.file)
-        self.root = self.tree.getroot()
 
-        self.namespace = etree.QName(self.root).namespace
-        if self.namespace != None and len(self.namespace) > 0:
-            self.namespace = '{' + self.namespace + '}'
+        try:
+            self.tree = mxml.read_xml_tree(self.file)
+            self.root = self.tree.getroot()
+            self.ok = True
+        except:
+            self.tree = None
+            self.root = None
+            self.ok = False
+
+        if self.ok:
+            self.namespace = etree.QName(self.root).namespace
+            if self.namespace != None and len(self.namespace) > 0:
+                self.namespace = '{' + self.namespace + '}'
 
     def save(self):
         mxml.write_xml(self.file, self.root)
