@@ -92,8 +92,11 @@ class slnmng(cssln):
         if delete_directory:
             self.__delete_project_directory(path.dirname(proj.file))
     def __delete_project_directory(self, dir_path):
-        shutil.rmtree(dir_path)
-        print("Project directory ({}) was removed successfuly".format(dir_path))
+        try:
+            shutil.rmtree(dir_path)
+            print("Project directory ({}) was removed successfuly".format(dir_path))
+        except:
+            print("Could not remove project directory at \"{}\"".format(dir_path))
 
     def __get_project_by_name(self, name):
         for h in self.projects:
