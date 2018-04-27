@@ -140,6 +140,7 @@ class MParser(object):
         parser = argparse.ArgumentParser(description='Gets remove project arguments', usage='{} {} rm [{{--rm-files, --keep-files}}]'.format(props.script_name, self.current_project))
         parser.add_argument('--rm-files', dest='files', action='store_true', help='Check if remove project files also')
         parser.add_argument('--keep-files', dest='files', action='store_false', help='Check if dont remove project files')
+        parser.add_argument('--no-system', dest='systemrefs', action='store_true', help='Check if not include system references like System or System.Drawing or System.Windows.Forms')
         parser.set_defaults(files=True)
 
         args = parser.parse_args(sys.argv[3:])
